@@ -5,7 +5,7 @@ class QuotesSpider(scrapy.Spider):
     name = "quotes"  # spider 的名字, 项目唯一
 
     start_urls = [
-            'http://quotes.toscrape.com/page/1/',
+            'http://quotes.toscrape.com/',
         ]
 
     def parse(self, response):
@@ -18,5 +18,4 @@ class QuotesSpider(scrapy.Spider):
 
         next_page = response.css('li.next a::attr(href)').get()
         if next_page:
-            next_page = response.urljoin(next_page)
-            yield scrapy.Request(next_page, callback=self.parse)
+            yield response.follow(next_page, callback=self.parse)
